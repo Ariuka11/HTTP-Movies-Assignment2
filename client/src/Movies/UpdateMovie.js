@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import api from '../utils/api'
 
 const UpdateMovie = (props) => {
     const [movie, setMovie] = useState({
@@ -9,13 +9,16 @@ const UpdateMovie = (props) => {
         metascore: '',
         stars: []
     })
+
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/movies/${props.match.params.id}`)
-            .then(res => setMovie(res.data))
-            .catch(err => {
-                console.log(err)
+        api().get(`/movies/${props.match.params.id}`)
+            .then(result => {
+                setMovie(result.data)
             })
-    },[])
+            .catch(error => {
+                console.log(error)
+            })
+    }, [props.match.params.id])
 
     const handleChange = e => {
         setMovie({
@@ -27,47 +30,61 @@ const UpdateMovie = (props) => {
     const handleSubmit = e => {
         e.preventDefault()
 
-        axios.put(`http://localhost:5000/api/movies/${movie.id}`, movie)
-        .then(res => {
-            props.history.push('/movies')
-        .catch(err => {
-            console.log(err)
-        })
-        })
+        api().put(`/movies/${movie.id}`, movie)
+            .then(result => {
+                console.log(result.data, "<-- Data Submitted in Put Request")
+                props.history.push(`/movies/${movie.id}`)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
+
     return (
-        <div>
-            <h1>Edit Movie</h1>
-            <form onSubmit = {handleSubmit}>
+        <div className='movie-card'>
+            <form onSubmit={handleSubmit} className='edit-form'>
+                <h1>Update Movie</h1>
+                <label>Title</label>
+                <h3>{movie.title}</h3>
                 <input 
-                    type = 'text'
-                    placeholder = 'Movie Title'
-                    name = 'movie-title'
-                    value = {movie.title}
-                    onChange = {handleChange}
-                 />
+                    type='text'
+                    name='title'
+                    placeholder='New Title'
+                    value={movie.title}
+                    onChange={handleChange}
+                />
+
+                <label>Director</label>
+                <h3>{movie.director}</h3>
                 <input 
-                    type = 'text'
-                    placeholder = 'Movie Director'
-                    name = 'movie-director'
-                    value = {movie.director}
-                    onChange = {handleChange}
-                 />
+                    type='text'
+                    name='director'
+                    placeholder='New Title'
+                    value={movie.director}
+                    onChange={handleChange}
+                />
+
+                <label>Metascore</label>
+                <h3>{movie.metascore}</h3>
                 <input 
-                    type = 'text'
-                    placeholder = 'Movie Metascore'
-                    name = 'movie-metascore'
-                    value = {movie.metascore}
-                    onChange = {handleChange}
-                 />
+                    type='text'
+                    name='metascore'
+                    placeholder='New Metascore'
+                    value={movie.metascore}
+                    onChange={handleChange}
+                />
+
+                {/* <label>Stars</label>
+                <h3>{movie.stars}</h3>
                 <input 
-                    type = 'text'
-                    placeholder = 'Movie Actors'
-                    name = 'movie-actors'
-                    value = {movie.actors}
-                    onChange = {handleChange}
-                 />
-                 <button>Update</button>
+                    type='text'
+                    name='stars'
+                    placeholder='New Stars'
+                    value={movie.stars}
+                    onChange={handleChange}
+                /> */}
+
+                <button className='save-button'>Save</button>
             </form>
         </div>
     )
