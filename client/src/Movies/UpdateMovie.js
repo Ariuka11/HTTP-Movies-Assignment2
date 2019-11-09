@@ -27,6 +27,13 @@ const UpdateMovie = (props) => {
         })
     }
 
+    const handleStars = e => {
+        setMovie({
+            ...movie,
+            stars:[e.target.value]
+        })
+    }
+
     const handleSubmit = e => {
         e.preventDefault()
 
@@ -74,15 +81,15 @@ const UpdateMovie = (props) => {
                     onChange={handleChange}
                 />
 
-                {/* <label>Stars</label>
+                <label>Stars</label>
                 <h3>{movie.stars}</h3>
                 <input 
                     type='text'
                     name='stars'
                     placeholder='New Stars'
                     value={movie.stars}
-                    onChange={handleChange}
-                /> */}
+                    onChange={handleStars}
+                />
 
                 <button className='save-button'>Save</button>
             </form>
