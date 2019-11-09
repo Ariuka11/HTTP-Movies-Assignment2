@@ -39,8 +39,8 @@ const UpdateMovie = (props) => {
 
         api().put(`/movies/${movie.id}`, movie)
             .then(result => {
-                console.log(result.data, "<-- Data Submitted in Put Request")
-                props.history.push(`/movies/${movie.id}`)
+                console.log(result.data)
+                props.history.push(`/`)
             })
             .catch(error => {
                 console.log(error)
